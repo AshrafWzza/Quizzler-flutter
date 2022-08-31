@@ -4,15 +4,16 @@ import 'quiz_brain.dart';
 
 QuizBrain quizBrain = QuizBrain(); //sportquiz QuizSport quizSport =QuizSport();
 //ToDo: Add Categories news, sports, cinema,
-void main() => runApp(Quizzler());
+void main() => runApp(const Quizzler());
 
 class Quizzler extends StatelessWidget {
+  const Quizzler({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
-        body: SafeArea(
+        body: const SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: QuizPage(),
@@ -24,32 +25,37 @@ class Quizzler extends StatelessWidget {
 }
 
 class QuizPage extends StatefulWidget {
+  const QuizPage({Key? key}) : super(key: key);
+
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
+  int score = 0;
   void checkAnswer(bool userAnswer) {
     bool correctAnswer = quizBrain.getQuestionAnswer();
     setState(() {
       if (quizBrain.isFinished() == true) {
-        Alert(context: context, title: "RFLUTTER", desc: "Flutter is awesome.")
+        Alert(context: context, title: "Completed", desc: "Your score: $score")
             .show();
+        // Reset All Values
         quizBrain.reset();
-        //ToDo:add reset Row List scoreKeeper
-        //ToDo:add overflow:hidden to scoreKeeper
+        scoreKeeper.clear();
+        score = 0;
       } else {
         if (correctAnswer == userAnswer) {
+          score++;
           scoreKeeper.add(
-            Icon(
+            const Icon(
               Icons.check,
               color: Colors.green,
             ),
           );
         } else {
           scoreKeeper.add(
-            Icon(
+            const Icon(
               Icons.close,
               color: Colors.red,
             ),
@@ -66,15 +72,20 @@ class _QuizPageState extends State<QuizPage> {
       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        Text('Score: $score',
+            style: const TextStyle(
+              fontSize: 25.0,
+              color: Colors.white,
+            )),
         Expanded(
           flex: 5,
           child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
                 quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25.0,
                   color: Colors.white,
                 ),
@@ -84,14 +95,14 @@ class _QuizPageState extends State<QuizPage> {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: TextButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.blue)),
               onPressed: () {
                 checkAnswer(true);
               },
-              child: Text(
+              child: const Text(
                 'True',
                 style: TextStyle(
                   color: Colors.white,
@@ -103,7 +114,7 @@ class _QuizPageState extends State<QuizPage> {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -111,7 +122,7 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 checkAnswer(false);
               },
-              child: Text(
+              child: const Text(
                 'False',
                 style: TextStyle(
                   color: Colors.white,
@@ -122,6 +133,7 @@ class _QuizPageState extends State<QuizPage> {
             //The user picked false.
           ),
         ),
+        //ToDo: fix overflow
         Row(
           children: scoreKeeper,
         )
